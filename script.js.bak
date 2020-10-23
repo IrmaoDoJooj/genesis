@@ -1,0 +1,140 @@
+let order = [];
+let clickordem = [];
+let pontos = 0;
+
+//0 - verde 
+//1 - vermelho
+//2 - amarelo
+//3 - azul
+
+const az = document.querySelector('.azul');
+const vo = document.querySelector('.vermelho');
+const ve = document.querySelector('.verde');
+const am = document.querySelector('.amarelo');
+
+
+//cria ordem aletoria de cores
+let randomizer = () => {
+    let colorOrder = Math.floor(Math.random() * 4);
+    order[order.length] = colorOrder;
+    clickordem = [];
+
+    for(let i in order) {
+        let element = criacor(order[i]);
+        lightColor(element, Number(i) + 1);
+        
+    }
+}
+
+//acende a proxima cor
+let lightColor = (element, number) => {
+    number = number * 500;
+    setTimeout(() => {
+        element.classList.add('selected');
+    }, number - 250);
+    setTimeout(() => {
+        element.classList.remove('selected');
+    });
+}
+
+
+/*cria ordem aleatoria de cores
+let randomizer = () => {
+    let cores = Math.floor(Math.random() * 4);
+    ordem[ordem.lenght] = cores;
+    clickordem = [];
+
+    for(let i in ordem) {
+        let elementocor = criacor(ordem[i]);
+        Piscar(elementoCor, Number(i) + 1);
+    }
+}
+
+//acende a cor
+let Piscar = (elemento, numero) => {
+    numero = numero * 500;
+    setTimeout(() => {
+        elemento.classList.add('selected');
+    }, numero - 250);
+    setTimeout(() => {
+        elemento.classList.remove('selected');
+    });
+}
+
+*/
+
+//verifica se acertou a ordem
+let acertou = () => {
+    for(let i in clickordem) {
+        if (clickordem[i] != order[i]) {
+            perdeu();
+            break;
+        }
+    }
+    if (clickordem.length == order.length) {
+        alert(`Pontuação: ${pontos}\nVocê acertou`);
+        proximonivel();
+    }
+}
+
+//funçao para o clique do usuario
+let click = (cor) => {
+    clickordem[clickordem.length] = cor;
+    criacor(cor).classList.add('selected');
+
+    setTimeout(() => {
+        criacor(cor).classList.remove('selected');
+        acertou();
+    },250);
+}
+
+//função que retorna a cor
+let criacor = (cor) => {
+    if(cor == 0) {
+        return ve;
+    } else if (cor == 1){
+        return vo;
+    } else if (cor == 2){
+            return am;
+    } else if (cor == 3) {
+        return az;
+    }
+
+}
+
+//função que passa de nivel
+let proximonivel = () => {
+    ponto++;
+    randomizer();
+    
+}
+
+//fim de jogo
+let perdeu = () => {
+    alert(`Pontuação: ${pontos}!\nVocê perdeu\nClique em OK para jogar novamente`)
+    order = [];
+    clickordem = [];
+
+    Jogar();
+}
+
+//inicia o jogo
+let Jogar = () => {
+    alert('O jogo vai começar!');
+    pontos = 0;
+
+    randomizer();
+    lightColor();
+    proximonivel();
+}
+
+//eventos de clique para as cores
+ve.onclick = () => click(0);
+vo.onclick = () => click(1);
+am.onclick = () => click(2);
+az.onclick = () => click(3);
+
+//inicio do jogo
+Jogar();
+
+
